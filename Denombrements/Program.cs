@@ -1,73 +1,85 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/**
+ * Titre: Denombrements
+ * Description: Programme qui permet le calcul de denombrements
+ * Auteur: Ethan Ménagé
+ * Date de création: 23-01-2024
+ * Date de dernière modification: 23-01-2024
+ */
+using System;
 
 namespace Denombrements
 {
     class Program
     {
+        /// <summary>
+        /// Calclul du produit de plusieurs entiers successifs (de valeurDepart à valeurArrivee)
+        /// </summary>
+        /// <param name="valeurDepart">valeur de départ du calcul</param>
+        /// <param name="valeurArrivee">valeur d'arrivée du calcul</param>
+        /// <returns>résultat du produit ou 0 si dépassement</returns>
+        static long ProduitEntier(int valeurDepart, int valeurArrivee)
+        {
+            long resultat = 1;
+            for (int k = valeurDepart; k <= valeurArrivee; k++)
+            {
+                resultat *= k;
+            }
+            return resultat;
+        }
+
+        /// <summary>
+        /// Menu permettant de choisir (à plusieurs reprise) plusieurs programme de calcul:
+        /// permutation, arrangement et combinaison
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int c = 1;
-            while (c != 0)
+            string choiseValue = "1";
+            while (choiseValue != "0")
             {
+                // Demande à l'utilsateur le choix du programme
                 Console.WriteLine("Permutation ...................... 1");
                 Console.WriteLine("Arrangement ...................... 2");
                 Console.WriteLine("Combinaison ...................... 3");
                 Console.WriteLine("Quitter .......................... 0");
                 Console.Write("Choix :                            ");
-                c = int.Parse(Console.ReadLine());
-
-                if (c == 0) { Environment.Exit(0); }
-
-                if (c == 1)
+                choiseValue = Console.ReadLine();
+                // Vérification du choix de l'utilisateur
+                if (choiseValue == "1" || choiseValue == "2" || choiseValue == "3")
                 {
-                    Console.Write("nombre total d'éléments à gérer = "); // le nombre d'éléments à gérer
-                    int n = int.Parse(Console.ReadLine()); // saisir le nombre
-                                                           // calcul de r
-                    long r = 1;
-                    for (int k = 1; k <= n; k++)
-                        r *= k;
-                    Console.WriteLine(n + "! = " + r);
-                }
-                else
-                {
-                    if (c == 2)
+                    try
                     {
-                        Console.Write("nombre total d'éléments à gérer = "); // le nombre d'éléments à gérer
-                        int t = int.Parse(Console.ReadLine()); // saisir le nombre
-                        Console.Write("nombre d'éléments dans le sous ensemble = "); // le sous ensemble
-                        int n = int.Parse(Console.ReadLine()); // saisir le nombre
-                        // calcul de r
-                        long r = 1;
-                        for (int k = (t - n + 1); k <= t; k++)
-                            r *= k;
-                        //Console.WriteLine("résultat = " + (r1 / r2));
-                        Console.WriteLine("A(" + t + "/" + n + ") = " + r);
-                    }
-                    else
+                        Console.Write("Nombre total d'éléments à gérer: ");
+                        int numberElements = int.Parse(Console.ReadLine());
+                        // Calcul de la permutation
+                        if (choiseValue == "1")
+                        {
+                            Console.WriteLine(numberElements + "! = " + ProduitEntier(1, numberElements));
+                        }
+                        else
+                        {
+                            Console.Write("Nombre d'éléments dans le sous-ensemble: ");
+                            int numberSousEnsemble = int.Parse(Console.ReadLine());
+                            long resultat = ProduitEntier(numberElements - numberSousEnsemble + 1, numberElements);
+                            // Calcul de l'arrangement
+                            if (choiseValue == "2")
+                            {
+                                Console.WriteLine("A(" + numberElements + "/" + numberSousEnsemble + ") = " + resultat);
+                            }
+                            // Calcul de la combinaison
+                            else if (choiseValue == "3")
+                            {
+                                long resultatSecondary = resultat / ProduitEntier(1, numberSousEnsemble);
+                                Console.WriteLine("C(" + numberElements + "/" + numberSousEnsemble + ") = " + resultatSecondary);
+                            }
+                        }
+                    } 
+                    catch
                     {
-                        Console.Write("nombre total d'éléments à gérer = "); // le nombre d'éléments à gérer
-                        int t = int.Parse(Console.ReadLine()); // saisir le nombre
-                        Console.Write("nombre d'éléments dans le sous ensemble = "); // le sous ensemble
-                        int n = int.Parse(Console.ReadLine()); // saisir le nombre
-                        // calcul de r1
-                        long r1 = 1;
-                        for (int k = (t - n + 1); k <= t; k++)
-                            r1 *= k;
-                        // calcul de r2
-                        long r2 = 1;
-                        for (int k = 1; k <= n; k++)
-                            r2 *= k;
-                        // calcul de r3
-                        //Console.WriteLine("résultat = " + (r1 / r2));
-                        Console.WriteLine("C(" + t + "/" + n + ") = " + (r1 / r2));
+                        Console.WriteLine("Impossible de faire le calcul !");
                     }
                 }
             }
-            Console.ReadLine();
         }
     }
 }
